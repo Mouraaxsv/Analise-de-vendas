@@ -9,4 +9,15 @@ segundo_pedido = [
     {"produto": "Refrigerante", "quantidade": 1, "preco_unitario": 6},
 ]
 
-pedidos = [itens_do_pedido, segundo_pedido]
+pedidos = [
+    {
+        "id": 1,
+        "data": "2026-09-24",
+        "itens": itens_do_pedido,
+    },
+    {
+        "id": 2,
+        "data": "2026-09-25",
+        "itens": segundo_pedido,
+    },
+]

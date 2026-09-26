@@ -4,7 +4,8 @@ from analises import (calcular_faturamento,
                       calcular_unidades_vendidas, 
                       calcular_quantidades_por_produto,
                       calcular_faturamento_por_produto,
-                      encontrar_produto_mais_vendido
+                      encontrar_produto_mais_vendido,
+                      calcular_faturamento_por_dia
 )
 
 
@@ -46,4 +47,5 @@ else:
     print(f"O produto mais vendido é: {produto} com {quantidade} unidades vendidas.")
 
 
-
+resultado_por_dia = calcular_faturamento_por_dia(pedidos)
+print(resultado_por_dia)

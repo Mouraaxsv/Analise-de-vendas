@@ -7,7 +7,12 @@ from analises import (
     calcular_unidades_vendidas,
     calcular_quantidades_por_produto,
     calcular_faturamento_por_produto,
+    calcular_faturamento_por_dia,
 )
+
+from datetime import date
+
+
 st.title("Painel de vendas da lanchonete")
 
 faturamento = calcular_faturamento(pedidos)
@@ -48,6 +53,8 @@ coluna4.metric(
 
 #GRAFICOS
 
+#UNIDADES VENDIDAS POR PRODUTO
+
 st.subheader("unidades vendidas por produto")
 
 quantidades = calcular_quantidades_por_produto(pedidos)
@@ -71,6 +78,10 @@ else:
     st.info("Nenhum produto foi vendido, portanto não há dados para exibir no gráfico.")
 
 
+
+
+#FATURAMENTO POR PRODUTO
+
 st.subheader("faturamento por produto")
 
 faturamento_produtos = calcular_faturamento_por_produto(pedidos)
@@ -88,6 +99,33 @@ if dados_faturamento:
         dados_faturamento,
         x="produto",
         y="faturamento",
+        y_label="Faturamento (R$)",
+    )
+else:
+    st.info("nenhuma venda registrada")
+
+
+
+#FATURAMENTO POR DIA
+
+st.subheader("faturamento por dia")
+
+faturamento_diario = calcular_faturamento_por_dia(pedidos)
+
+dados_diarios = []
+
+for data_venda, valor in sorted(faturamento_diario.items()):
+    dados_diarios.append({
+        "data": date.fromisoformat(data_venda),
+        "faturamento": valor,
+    })
+
+if dados_diarios:
+    st.line_chart(
+        dados_diarios,
+        x="data",
+        y="faturamento",
+        x_label="Data",
         y_label="Faturamento (R$)",
     )
 else:
