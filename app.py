@@ -8,6 +8,8 @@ from analises import (
     calcular_quantidades_por_produto,
     calcular_faturamento_por_produto,
     calcular_faturamento_por_dia,
+    filtrar_pedidos_por_periodo,
+    encontrar_produto_mais_vendido,
 )
 
 from datetime import date
@@ -15,9 +17,39 @@ from datetime import date
 
 st.title("Painel de vendas da lanchonete")
 
-faturamento = calcular_faturamento(pedidos)
-quantidade_pedidos = len(pedidos)
-unidades_vendidas = calcular_unidades_vendidas(pedidos)
+
+data_inicio = st.date_input(
+    "Data de início",
+    value=date(2026, 9, 24),
+    format="DD/MM/YYYY",
+)
+
+data_fim = st.date_input(
+    "Data de fim",
+    value=date(2026, 9, 24),
+    format="DD/MM/YYYY",
+)
+
+st.write("Inicio escolhido: ", data_inicio)
+st.write("Fim escolhido: ", data_fim)
+
+if data_inicio > data_fim:
+    st.error("A data inicial não pode ser posterior à data de fim.")
+    st.stop()
+
+pedidos_filtrados = filtrar_pedidos_por_periodo(
+    pedidos, 
+    data_inicio, 
+    data_fim
+)
+
+
+faturamento = calcular_faturamento(pedidos_filtrados)
+quantidade_pedidos = len(pedidos_filtrados)
+unidades_vendidas = calcular_unidades_vendidas(pedidos_filtrados)
+
+
+st.write(f"Pedidos no período:", len(pedidos_filtrados))
 
 
 if quantidade_pedidos> 0:
@@ -57,7 +89,19 @@ coluna4.metric(
 
 st.subheader("unidades vendidas por produto")
 
-quantidades = calcular_quantidades_por_produto(pedidos)
+quantidades = calcular_quantidades_por_produto(pedidos_filtrados)
+
+produto_mais_vendido, quantidade_vendida, = encontrar_produto_mais_vendido(
+    quantidades
+)
+
+if produto_mais_vendido is None:
+    st.info("Nenhum produto foi vendido, portanto não há dados para exibir no gráfico.")
+else:
+    st.write(f"produto mais vendido: {produto_mais_vendido} com ",
+             f"{quantidade_vendida} unidades vendidas"
+    )
+
 
 dados_grafico = []
 
@@ -84,7 +128,7 @@ else:
 
 st.subheader("faturamento por produto")
 
-faturamento_produtos = calcular_faturamento_por_produto(pedidos)
+faturamento_produtos = calcular_faturamento_por_produto(pedidos_filtrados)
 
 dados_faturamento = []
 
@@ -110,7 +154,7 @@ else:
 
 st.subheader("faturamento por dia")
 
-faturamento_diario = calcular_faturamento_por_dia(pedidos)
+faturamento_diario = calcular_faturamento_por_dia(pedidos_filtrados)
 
 dados_diarios = []
 

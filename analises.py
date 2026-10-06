@@ -1,3 +1,6 @@
+from datetime import date
+
+
 #FUNÇÕES PARA ANALISE DO PROJETO
 
 
@@ -77,6 +80,7 @@ def encontrar_produto_mais_vendido(quantidades):
 
 
 def calcular_faturamento_por_dia(pedidos):
+
     faturamento_por_dia = {}
 
     for pedido in pedidos:
@@ -86,3 +90,14 @@ def calcular_faturamento_por_dia(pedidos):
             faturamento_por_dia[data] = 0
         faturamento_por_dia[data] += total_pedido
     return faturamento_por_dia
+
+
+
+
+def filtrar_pedidos_por_periodo(pedidos, data_inicio, data_fim):
+    pedidos_filtrados = []
+    for pedido in pedidos:
+        data_pedido = date.fromisoformat(pedido["data"])
+        if data_inicio <= data_pedido <= data_fim:
+            pedidos_filtrados.append(pedido)
+    return pedidos_filtrados
